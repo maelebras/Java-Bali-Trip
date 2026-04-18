@@ -1,0 +1,1310 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Java — 6 jours vers Bali</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #F5F0E8;
+    --sand: #E8DFC8;
+    --dark: #1A1612;
+    --brown: #3D2B1F;
+    --orange: #C4622D;
+    --teal: #2A6B5E;
+    --gold: #B8942A;
+    --muted: #8C7B6B;
+    --card: #FDFAF4;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--cream);
+    color: var(--dark);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    background: var(--dark);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    padding: 3rem 2rem;
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background: 
+      radial-gradient(ellipse at 20% 50%, rgba(196,98,45,0.15) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 30%, rgba(42,107,94,0.12) 0%, transparent 50%),
+      radial-gradient(ellipse at 50% 80%, rgba(184,148,42,0.08) 0%, transparent 50%);
+  }
+
+  .hero-deco {
+    position: absolute;
+    width: 600px;
+    height: 600px;
+    border: 0.5px solid rgba(255,255,255,0.06);
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  .hero-deco:nth-child(2) { width: 800px; height: 800px; border-color: rgba(255,255,255,0.03); }
+  .hero-deco:nth-child(3) { width: 400px; height: 400px; border-color: rgba(196,98,45,0.12); }
+
+  .hero-label {
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 400;
+    font-size: 0.7rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin-bottom: 1.5rem;
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.2s forwards;
+  }
+  .hero-label::before, .hero-label::after {
+    content: '';
+    width: 40px;
+    height: 0.5px;
+    background: var(--orange);
+    opacity: 0.6;
+  }
+
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(3.5rem, 10vw, 7rem);
+    font-weight: 700;
+    color: var(--cream);
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    position: relative;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.4s forwards;
+  }
+
+  .hero h1 em {
+    font-style: italic;
+    color: var(--orange);
+  }
+
+  .hero-sub {
+    font-size: 1rem;
+    color: rgba(245,240,232,0.5);
+    margin-top: 1.5rem;
+    font-weight: 300;
+    letter-spacing: 0.05em;
+    position: relative;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.6s forwards;
+  }
+
+  .hero-stats {
+    display: flex;
+    gap: 3rem;
+    margin-top: 3.5rem;
+    position: relative;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.8s forwards;
+  }
+
+  .stat {
+    text-align: center;
+  }
+  .stat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--cream);
+  }
+  .stat-label {
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(245,240,232,0.35);
+    margin-top: 0.2rem;
+  }
+
+  .stat-divider {
+    width: 0.5px;
+    background: rgba(255,255,255,0.1);
+    align-self: stretch;
+  }
+
+  .hero-scroll {
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    opacity: 0;
+    animation: fadeUp 0.8s 1.2s forwards;
+  }
+  .hero-scroll span {
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.25);
+  }
+  .scroll-line {
+    width: 0.5px;
+    height: 40px;
+    background: linear-gradient(to bottom, rgba(255,255,255,0.3), transparent);
+    animation: scrollPulse 2s infinite;
+  }
+
+  /* ROUTE BAR */
+  .route-bar {
+    background: var(--brown);
+    padding: 1.2rem 3rem;
+    display: flex;
+    align-items: center;
+    gap: 0;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+  .route-stop {
+    display: flex;
+    align-items: center;
+    gap: 0;
+  }
+  .stop-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--orange);
+    flex-shrink: 0;
+  }
+  .stop-name {
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(245,240,232,0.7);
+    padding: 0 0.8rem;
+    font-weight: 400;
+  }
+  .stop-line {
+    width: 30px;
+    height: 0.5px;
+    background: rgba(255,255,255,0.15);
+    flex-shrink: 0;
+  }
+  .stop-arrow {
+    color: rgba(255,255,255,0.2);
+    font-size: 0.7rem;
+    padding: 0 0.4rem;
+  }
+
+  /* MAIN LAYOUT */
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  /* SECTION INTRO */
+  .intro-section {
+    padding: 5rem 0 3rem;
+  }
+  .section-tag {
+    font-size: 0.65rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+  }
+  .section-tag::before {
+    content: '';
+    width: 24px;
+    height: 0.5px;
+    background: var(--orange);
+  }
+
+  /* DAYS */
+  .days-section {
+    padding: 2rem 0 6rem;
+  }
+
+  .day-entry {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    gap: 0;
+    margin-bottom: 0;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s, transform 0.6s;
+  }
+  .day-entry.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .day-spine {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 0.3rem;
+  }
+  .day-circle {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    font-weight: 700;
+    border: 1px solid;
+    z-index: 1;
+  }
+  .day-line {
+    width: 1px;
+    flex: 1;
+    min-height: 40px;
+    background: linear-gradient(to bottom, rgba(61,43,31,0.3), rgba(61,43,31,0.1));
+    margin-top: 8px;
+  }
+
+  .day-content {
+    padding: 0 0 3.5rem 1.5rem;
+  }
+
+  .day-header {
+    margin-bottom: 1.5rem;
+  }
+  .day-date {
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.3rem;
+  }
+  .day-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--dark);
+  }
+  .day-title em {
+    font-style: italic;
+    color: var(--orange);
+  }
+  .day-subtitle {
+    font-size: 0.85rem;
+    color: var(--muted);
+    margin-top: 0.4rem;
+  }
+
+  .blocks {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    background: var(--card);
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid rgba(61,43,31,0.1);
+  }
+
+  .block {
+    display: flex;
+    gap: 1rem;
+    padding: 1rem 1.25rem;
+    border-bottom: 0.5px solid rgba(61,43,31,0.07);
+    align-items: flex-start;
+  }
+  .block:last-child { border-bottom: none; }
+  .block.section-head {
+    background: rgba(61,43,31,0.04);
+    padding: 0.5rem 1.25rem;
+    border-bottom: 0.5px solid rgba(61,43,31,0.08);
+  }
+  .section-head-label {
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 500;
+  }
+
+  .block-icon {
+    font-size: 1.1rem;
+    width: 32px;
+    flex-shrink: 0;
+    text-align: center;
+    margin-top: 2px;
+  }
+  .block-body { flex: 1; min-width: 0; }
+  .block-time {
+    font-size: 0.7rem;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+    margin-bottom: 2px;
+  }
+  .block-name {
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--dark);
+    margin-bottom: 4px;
+    line-height: 1.3;
+  }
+  .block-desc {
+    font-size: 0.82rem;
+    color: #6B5B4E;
+    line-height: 1.6;
+  }
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-top: 7px;
+  }
+  .tag {
+    font-size: 0.68rem;
+    padding: 2px 9px;
+    border-radius: 20px;
+    line-height: 1.6;
+  }
+  .tag-tip { background: #E8F4F0; color: #1F5C52; }
+  .tag-warn { background: #FDF2E0; color: #7A5010; }
+  .tag-price { background: #E8F2E0; color: #2E5A1A; }
+  .tag-time { background: #F0EDE8; color: #5C4A3A; }
+
+  /* BUDGET SECTION */
+  .budget-section {
+    background: var(--dark);
+    padding: 5rem 0;
+    color: var(--cream);
+  }
+  .budget-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 1px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-top: 2.5rem;
+  }
+  .budget-cell {
+    background: rgba(26,22,18,0.95);
+    padding: 1.5rem 1.25rem;
+    text-align: center;
+  }
+  .budget-cell.total {
+    background: var(--orange);
+  }
+  .budget-label {
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(245,240,232,0.4);
+    margin-bottom: 0.5rem;
+  }
+  .budget-cell.total .budget-label { color: rgba(245,240,232,0.7); }
+  .budget-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--cream);
+  }
+
+  /* TIPS SECTION */
+  .tips-section {
+    padding: 5rem 0;
+  }
+  .tips-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1rem;
+    margin-top: 2.5rem;
+  }
+  .tip-card {
+    background: var(--card);
+    border: 1px solid rgba(61,43,31,0.1);
+    border-radius: 10px;
+    padding: 1.25rem;
+  }
+  .tip-icon { font-size: 1.5rem; margin-bottom: 0.75rem; }
+  .tip-title {
+    font-weight: 500;
+    font-size: 0.9rem;
+    margin-bottom: 0.4rem;
+    color: var(--dark);
+  }
+  .tip-text {
+    font-size: 0.8rem;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  /* FOOTER */
+  footer {
+    background: var(--brown);
+    padding: 2rem;
+    text-align: center;
+  }
+  footer p {
+    font-size: 0.75rem;
+    color: rgba(245,240,232,0.3);
+    letter-spacing: 0.1em;
+  }
+  footer strong {
+    color: rgba(245,240,232,0.6);
+    font-weight: 400;
+  }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes scrollPulse {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 0.8; }
+  }
+
+  /* Day color themes */
+  .d1 .day-circle { color: #185FA5; border-color: #B5D4F4; background: #E6F1FB; }
+  .d2 .day-circle { color: #3B6D11; border-color: #C0DD97; background: #EAF3DE; }
+  .d3 .day-circle { color: #3C3489; border-color: #AFA9EC; background: #EEEDFE; }
+  .d4 .day-circle { color: #993C1D; border-color: #F0997B; background: #FAECE7; }
+  .d5 .day-circle { color: #712B13; border-color: #D85A30; background: #FAECE7; }
+  .d6 .day-circle { color: #085041; border-color: #5DCAA5; background: #E1F5EE; }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-deco"></div>
+  <div class="hero-deco"></div>
+  <div class="hero-deco"></div>
+
+  <div class="hero-label">Itinéraire · Septembre 2026</div>
+  <h1>Java<br><em>vers Bali</em></h1>
+  <p class="hero-sub">Jakarta · Yogyakarta · Borobudur · Prambanan · Bromo · Ijen</p>
+
+  <div class="hero-stats">
+    <div class="stat">
+      <div class="stat-num">6</div>
+      <div class="stat-label">Jours</div>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat">
+      <div class="stat-num">5</div>
+      <div class="stat-label">Sites majeurs</div>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat">
+      <div class="stat-num">~250</div>
+      <div class="stat-label">CHF budget</div>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat">
+      <div class="stat-num">8→14</div>
+      <div class="stat-label">Sept</div>
+    </div>
+  </div>
+
+  <div style="margin-top: 3rem; position: relative; opacity: 0; animation: fadeUp 0.8s 1s forwards;">
+    <div style="border: 1px solid rgba(196,98,45,0.35); border-radius: 6px; padding: 0.9rem 1.8rem; display: inline-block; background: rgba(196,98,45,0.07);">
+      <p style="font-family: 'Playfair Display', serif; font-size: clamp(0.9rem, 2.5vw, 1.25rem); font-style: italic; color: rgba(245,240,232,0.9); letter-spacing: 0.01em; line-height: 1.4;">
+        "TU DIS PLUS JAMAIS ÇA EN MA PRÉSENCE <span style="color: var(--orange); font-style: normal; font-weight: 700;">DE TYPE 2</span>"
+      </p>
+    </div>
+  </div>
+
+  <div class="hero-scroll">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- ROUTE BAR -->
+<div class="route-bar">
+  <div class="route-stop"><div class="stop-dot"></div><span class="stop-name">Genève</span></div>
+  <div class="stop-line"></div><div class="stop-arrow">✈</div><div class="stop-line"></div>
+  <div class="route-stop"><div class="stop-dot"></div><span class="stop-name">Abu Dhabi</span></div>
+  <div class="stop-line"></div><div class="stop-arrow">✈</div><div class="stop-line"></div>
+  <div class="route-stop"><div class="stop-dot"></div><span class="stop-name">Jakarta</span></div>
+  <div class="stop-line"></div><div class="stop-arrow">✈</div><div class="stop-line"></div>
+  <div class="route-stop"><div class="stop-dot"></div><span class="stop-name">Yogyakarta</span></div>
+  <div class="stop-line"></div><div class="stop-arrow">→</div><div class="stop-line"></div>
+  <div class="route-stop"><div class="stop-dot"></div><span class="stop-name">Borobudur</span></div>
+  <div class="stop-line"></div><div class="stop-arrow">→</div><div class="stop-line"></div>
+  <div class="route-stop"><div class="stop-dot"></div><span class="stop-name">Bromo</span></div>
+  <div class="stop-line"></div><div class="stop-arrow">→</div><div class="stop-line"></div>
+  <div class="route-stop"><div class="stop-dot"></div><span class="stop-name">Ijen</span></div>
+  <div class="stop-line"></div><div class="stop-arrow">⛴</div><div class="stop-line"></div>
+  <div class="route-stop"><div class="stop-dot" style="background:#2A6B5E;"></div><span class="stop-name" style="color:#5DCAA5;">Bali</span></div>
+</div>
+
+<!-- DAYS -->
+<section class="days-section">
+  <div class="container">
+
+    <!-- J1 -->
+    <div class="day-entry d1">
+      <div class="day-spine">
+        <div class="day-circle">J1</div>
+        <div class="day-line"></div>
+      </div>
+      <div class="day-content">
+        <div class="day-header">
+          <div class="day-date">Mardi 8 septembre 2026</div>
+          <div class="day-title">Arrivée à <em>Jakarta</em></div>
+          <div class="day-subtitle">Vol Abu Dhabi → CGK · Atterrissage 09h35 · Terminal 3</div>
+        </div>
+        <div class="blocks">
+          <div class="block section-head"><span class="section-head-label">Matin</span></div>
+          <div class="block">
+            <div class="block-icon">✈️</div>
+            <div class="block-body">
+              <div class="block-time">09h35 — ~1h30 dans l'aéroport</div>
+              <div class="block-name">Atterrissage Soekarno-Hatta (CGK) — Terminal 3</div>
+              <div class="block-desc">Immigration + récupération bagages. La file étrangers peut être longue. Change des roupies directement au bureau de change officiel dans le terminal.</div>
+              <div class="tags">
+                <span class="tag tag-tip">Meilleur taux de change à l'aéroport — change l'équivalent de 50–80 CHF pour les premiers jours</span>
+              </div>
+            </div>
+          </div>
+          <div class="block">
+            <div class="block-icon">🚌</div>
+            <div class="block-body">
+              <div class="block-time">11h15 — ~1h de trajet</div>
+              <div class="block-name">Grab ou Bus Damri → Kota Tua</div>
+              <div class="block-desc">Bus Damri direct aéroport → Gambir (~50k IDR, 60 min) ou Grab (~150–200k, plus confortable). Installe l'appli Grab avant de partir de Suisse — indispensable tout le voyage.</div>
+              <div class="tags">
+                <span class="tag tag-warn">Ignore les rabatteurs de taxi à la sortie — commande un Grab depuis l'appli</span>
+                <span class="tag tag-price">Bus ~2.50 CHF · Grab ~8 CHF</span>
+              </div>
+            </div>
+          </div>
+          <div class="block section-head"><span class="section-head-label">Après-midi</span></div>
+          <div class="block">
+            <div class="block-icon">🏛️</div>
+            <div class="block-body">
+              <div class="block-time">12h30 — 2h–3h de visite</div>
+              <div class="block-name">Kota Tua — Vieille ville coloniale hollandaise</div>
+              <div class="block-desc">Place Fatahillah, architecture du XVIIe siècle. Loue un vélo hollandais coloré sur la place. Musée d'Histoire si tu es curieux (Museum Sejarah Jakarta). Café Batavia pour souffler en terrasse.</div>
+              <div class="tags">
+                <span class="tag tag-time">2–3h</span>
+                <span class="tag tag-price">Musée ~1 CHF · Vélo ~2 CHF/h</span>
+              </div>
+            </div>
+          </div>
+          <div class="block">
+            <div class="block-icon">🌴</div>
+            <div class="block-body">
+              <div class="block-time">15h30 — 1h</div>
+              <div class="block-name">Glodok — Chinatown de Jakarta</div>
+              <div class="block-desc">À 10 min à pied de Kota Tua. Temple Vihara Dharma Bhakti, marchés animés, ambiance très différente. Optionnel si tu es crevé par le décalage horaire (+6h vs Suisse en été).</div>
+              <div class="tags">
+                <span class="tag tag-tip">Décalage horaire Jakarta = UTC+7 — les premiers jours peuvent être difficiles, écoute ton corps</span>
+              </div>
+            </div>
+          </div>
+          <div class="block section-head"><span class="section-head-label">Soir</span></div>
+          <div class="block">
+            <div class="block-icon">🍜</div>
+            <div class="block-body">
+              <div class="block-time">19h00 — 1h</div>
+              <div class="block-name">Premier dîner — Warung Nasi Padang</div>
+              <div class="block-desc">Tu pointes les plats exposés, servis sur riz. Rendang, ayam balado, sayur lodeh. Manger avec les doigts, prix dérisoire. Premier vrai contact avec la cuisine indonésienne.</div>
+              <div class="tags">
+                <span class="tag tag-price">Repas complet ~2–3 CHF</span>
+                <span class="tag tag-warn">Toujours eau en bouteille — jamais l'eau du robinet</span>
+              </div>
+            </div>
+          </div>
+          <div class="block">
+            <div class="block-icon">🏨</div>
+            <div class="block-body">
+              <div class="block-time">20h30 — Nuit</div>
+              <div class="block-name">Hôtel à Jakarta — Quartier Gambir ou Kota</div>
+              <div class="block-desc">Reste proche de l'aéroport ou de Gambir — vol tôt demain. Ibis Jakarta Harmoni ou guesthouses à Kota Tua sont bien situés.</div>
+              <div class="tags">
+                <span class="tag tag-price">Hôtel ~15–25 CHF/nuit</span>
+                <span class="tag tag-tip">Couche-tôt — réveil 08h demain pour attraper le vol 10h40</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- J2 -->
+    <div class="day-entry d2">
+      <div class="day-spine">
+        <div class="day-circle">J2</div>
+        <div class="day-line"></div>
+      </div>
+      <div class="day-content">
+        <div class="day-header">
+          <div class="day-date">Mercredi 9 septembre 2026</div>
+          <div class="day-title">Vol vers <em>Yogyakarta</em></div>
+          <div class="day-subtitle">Jakarta CGK → YIA · 10h40–11h50 · Arrivée centre ~13h30</div>
+        </div>
+        <div class="blocks">
+          <div class="block section-head"><span class="section-head-label">Matin</span></div>
+          <div class="block">
+            <div class="block-icon">⏰</div>
+            <div class="block-body">
+              <div class="block-time">08h00</div>
+              <div class="block-name">Départ hôtel → Aéroport CGK</div>
+              <div class="block-desc">Grab vers l'aéroport (~45 min depuis le centre). CGK est immense — être au terminal 2h avant le vol, donc arriver à 08h30 au plus tard. Vérifie bien ton terminal de départ.</div>
+              <div class="tags">
+                <span class="tag tag-warn">3 terminaux à CGK — vérifie le bon sur ton billet avant de prendre le Grab</span>
+              </div>
+            </div>
+          </div>
+          <div class="block">
+            <div class="block-icon">✈️</div>
+            <div class="block-body">
+              <div class="block-time">10h40 → 11h50</div>
+              <div class="block-name">Vol Jakarta (CGK) → Yogyakarta (YIA)</div>
+              <div class="block-desc">1h10 de vol. Lion Air, Citilink ou Garuda. YIA = Yogyakarta International Airport, le plus récent, à 45 km du centre. Vue sur les volcans de Java à la descente côté hublot gauche.</div>
+              <div class="tags">
+                <span class="tag tag-time">1h10 de vol</span>
+              </div>
+            </div>
+          </div>
+          <div class="block">
+            <div class="block-icon">🚌</div>
+            <div class="block-body">
+              <div class="block-time">12h00 → 13h15</div>
+              <div class="block-name">Navette YIA → Centre Yogyakarta</div>
+              <div class="block-desc">Bus Damri YIA → Gare Tugu (centre) : ~20k IDR, 45–60 min. Ou Grab ~80–120k IDR. Le bus Damri est très bien et s'arrête directement à la gare centrale.</div>
+              <div class="tags">
+                <span class="tag tag-price">Bus Damri ~1 CHF · Grab ~5 CHF</span>
+              </div>
+            </div>
+          </div>
+          <div class="block section-head"><span class="section-head-label">Après-midi</span></div>
+          <div class="block">
+            <div class="block-icon">🍚</div>
+            <div class="block-body">
+              <div class="block-time">13h30 — 45 min</div>
+              <div class="block-name">Repas + Check-in hôtel</div>
+              <div class="block-desc">Quartier Prawirotaman (backpackers, ambiance artsy) ou Malioboro (hyper central). Mange un Gudeg — la spécialité de Yogya à base de jackfruit, servi avec riz et poulet.</div>
+              <div class="tags">
+                <span class="tag tag-price">Repas ~2 CHF · Hôtel ~15–30 CHF/nuit</span>
+                <span class="tag tag-tip">Via Via Guest House (Prawirotaman) ou Omah Ngabean — deux bonnes adresses</span>
+              </div>
+            </div>
+          </div>
+          <div class="block">
+            <div class="block-icon">🏯</div>
+            <div class="block-body">
+              <div class="block-time">15h00 — 1h30</div>
+              <div class="block-name">Kraton — Palais du Sultan</div>
+              <div class="block-desc">Résidence officielle du Sultan, encore habitée. Musée vivant de la culture javanaise. Gamelan joué en live certains après-midis. Architecture palatiale remarquable.</div>
+              <div class="tags">
+                <span class="tag tag-time">1h–1h30</span>
+                <span class="tag tag-price">Entrée ~15k IDR</span>
+                <span class="tag tag-warn">Ferme à 16h — priorité à cette visite à l'arrivée</span>
+              </div>
+            </div>
+          </div>
+          <div class="block">
+            <div class="block-icon">🛍️</div>
+            <div class="block-body">
+              <div class="block-time">17h00 — 1h30</div>
+              <div class="block-name">Rue Malioboro — Balade & artisanat</div>
+              <div class="block-desc">Batik, wayang (marionnettes traditionnelles), rue piétonne. Le soir des vendeurs de street food envahissent la rue. Très bonne intro à la culture locale.</div>
+              <div class="tags">
+                <span class="tag tag-tip">Marchande systématiquement — 50% du prix affiché est la norme</span>
+              </div>
+            </div>
+          </div>
+          <div class="block">
+            <div class="block-icon">🌅</div>
+            <div class="block-body">
+              <div class="block-time">18h30 — 45 min</div>
+              <div class="block-name">Taman Sari — Château d'eau royal</div>
+              <div class="block-desc">Ancien complexe royal avec bassins, tunnels et passages secrets. Magnifique en lumière dorée en fin de journée. À 10 min à pied du Kraton.</div>
+              <div class="tags">
+                <span class="tag tag-price">Entrée ~15k IDR</span>
+                <span class="tag tag-time">30–45 min</span>
+              </div>
+            </div>
+          </div>
+          <div class="block section-head"><span class="section-head-label">Soir</span></div>
+          <div class="block">
+            <div class="block-icon">🍛</div>
+            <div class="block-body">
+              <div class="block-time">20h00 — Nuit</div>
+              <div class="block-name">Dîner & coucher tôt</div>
+              <div class="block-desc">Soto Ayam (soupe de poulet épicée) ou Bakmi Jawa (nouilles javanaises). Coucher à 21h max — réveil 05h demain pour Borobudur.</div>
+              <div class="tags">
+                <span class="tag tag-warn">Couche à 21h impératif — J3 commence très tôt</span>
+                <span class="tag tag-tip">Prépare ton sac et achète snacks + eau pour demain le soir même</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- J3 -->
+    <div class="day-entry d3">
+      <div class="day-spine">
+        <div class="day-circle">J3</div>
+        <div class="day-line"></div>
+      </div>
+      <div class="day-content">
+        <div class="day-header">
+          <div class="day-date">Jeudi 10 septembre 2026</div>
+          <div class="day-title"><em>Borobudur</em> & Prambanan</div>
+          <div class="day-subtitle">Deux sites UNESCO · ~80 km · Journée complète</div>
+        </div>
+        <div class="blocks">
+          <div class="block section-head"><span class="section-head-label">Très tôt</span></div>
+          <div class="block">
+            <div class="block-icon">⏰</div>
+            <div class="block-body">
+              <div class="block-time">05h00</div>
+              <div class="block-name">Réveil & départ</div>
+              <div class="block-desc">Petit-déjeuner rapide à la guesthouse ou warung ouvert dès 5h. Bouteille d'eau et snack pour la route. Chauffeur privé recommandé pour la journée (~400–600k IDR) — il attend entre les deux temples.</div>
+              <div class="tags">
+                <span class="tag tag-tip">Négocie le chauffeur privé la veille depuis ton hôtel — plus pratique et pas beaucoup plus cher à partager</span>
+                <span class="tag tag-price">Chauffeur journée ~25 CHF · Scooter ~4 CHF/j</span>
+              </div>
+            </div>
+          </div>
+          <div class="block section-head"><span class="section-head-label">Matin</span></div>
+          <div class="block">
+            <div class="block-icon">🛕</div>
+            <div class="block-body">
+              <div class="block-time">06h30 — 2h30 de visite</div>
+              <div class="block-name">Borobudur — Plus grand temple bouddhiste du monde</div>
+              <div class="block-desc">Construit au IXe siècle : 2672 panneaux de bas-reliefs, 504 statues de Bouddha, 9 terrasses. Monte d'abord jusqu'au stupa central pour la vue sur la jungle et les volcans. Arriver à l'ouverture = quasiment seul.</div>
+              <div class="tags">
+                <span class="tag tag-time">2h–2h30</span>
+                <span class="tag tag-price">Entrée étrangers ~375k IDR (~22 CHF) — réserve en ligne</span>
+                <span class="tag tag-warn">Sandales obligatoires sur les pierres — fournies sur place, sneakers interdites</span>
+                <span class="tag tag-tip">Monte en haut en premier, puis descends en lisant les bas-reliefs</span>
+              </div>
+            </div>
+          </div>
+          <div class="block">
+            <div class="block-icon">☕</div>
+            <div class="block-body">
+              <div class="block-time">09h15 — 45 min</div>
+              <div class="block-name">Pause café & fruits frais</div>
+              <div class="block-desc">Vendors de fruits, jus de coco, warung autour du temple. Mange avant la route vers Prambanan. Le parc autour est agréable pour souffler.</div>
+            </div>
+          </div>
+          <div class="block">
+            <div class="block-icon">🚗</div>
+            <div class="block-body">
+              <div class="block-time">10h00 — 1h de route</div>
+              <div class="block-name">Route Borobudur → Prambanan</div>
+              <div class="block-desc">~45 km, 1h en voiture à travers la campagne javanaise. Champs de riz, petits villages. Le chauffeur peut s'arrêter pour des photos en route.</div>
+            </div>
+          </div>
+          <div class="block section-head"><span class="section-head-label">Milieu de journée</span></div>
+          <div class="block">
+            <div class="block-icon">🍽️</div>
+            <div class="block-body">
+              <div class="block-time">11h00 — 45 min</div>
+              <div class="block-name">Repas — Warung local près de Prambanan</div>
+              <div class="block-desc">Mange avant d'entrer dans le site — les restos intérieurs sont touristiques et moins bons. Nasi goreng ou mie goreng, valeur sûre.</div>
+              <div class="tags">
+                <span class="tag tag-price">Warung ~2 CHF</span>
+              </div>
+            </div>
+          </div>
+          <div class="block">
+            <div class="block-icon">🛕</div>
+            <div class="block-body">
+              <div class="block-time">12h00 — 2h30 de visite</div>
+              <div class="block-name">Prambanan — Complexe hindou du IXe siècle</div>
+              <div class="block-desc">240 temples dont 3 tours principales dédiées à Brahma, Vishnu et Shiva. Style radicalement différent de Borobudur — tours effilées vers le ciel. Les reliefs du Ramayana sur les murs sont fascinants.</div>
+              <div class="tags">
+                <span class="tag tag-time">2h–2h30</span>
+                <span class="tag tag-price">~375k IDR · Combo Borobudur+Prambanan ~700k</span>
+                <span class="tag tag-tip">Prends un guide sur place ~150k IDR — les reliefs du Ramayana sont incompréhensibles sans</span>
+                <span class="tag tag-warn">Chaleur intense 12h–14h — chapeau et crème solaire indispensables</span>
+              </div>
+            </div>
+          </div>
+          <div class="block section-head"><span class="section-head-label">Fin d'après-midi</span></div>
+          <div class="block">
+            <div class="block-icon">🌋</div>
+            <div class="block-body">
+              <div class="block-time">15h30 — Optionnel</div>
+              <div class="block-name">Kaliadem — Point de vue sur le Merapi</div>
+              <div class="block-desc">Le volcan Merapi (2930m, actif) à ~25 km du centre. Kaliadem : ruines laissées par l'éruption de 2010. Paysage saisissant. Seulement si tu as encore de l'énergie.</div>
+              <div class="tags">
+                <span class="tag tag-time">1h30 aller-retour</span>
+                <span class="tag tag-tip">Optionnel — garde ton énergie pour le Bromo et l'Ijen qui sont bien plus physiques</span>
+              </div>
+            </div>
+          </div>
+          <div class="block">
+            <div class="block-icon">🍛</div>
+            <div class="block-body">
+              <div class="block-time">19h00 — Nuit</div>
+              <div class="block-name">Dernier dîner à Yogya & préparation</div>
+              <div class="block-desc">Ayam Goreng Suharti (poulet frit javanais) ou street food Malioboro. Prépare le sac pour demain — départ 07h. Achète snacks et eau ce soir.</div>
+              <div class="tags">
+                <span class="tag tag-warn">Couche à 21h — départ bus 07h demain, route 7–8h vers le Bromo</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- J4 -->
+    <div class="day-entry d4">
+      <div class="day-spine">
+        <div class="day-circle">J4</div>
+        <div class="day-line"></div>
+      </div>
+      <div class="day-content">
+        <div class="day-header">
+          <div class="day-date">Vendredi 11 septembre 2026</div>
+          <div class="day-title">Route vers le <em>Bromo</em></div>
+          <div class="day-subtitle">Yogyakarta → Cemoro Lawang · 7–8h de trajet total · Alt. 2329m</div>
+        </div>
+        <div class="blocks">
+          <div class="block section-head"><span class="section-head-label">Matin</span></div>
+          <div class="block">
+            <div class="block-icon">🚌</div>
+            <div class="block-body">
+              <div class="block-time">07h00</div>
+              <div class="block-name">Bus ou train depuis Yogyakarta → Probolinggo</div>
+              <div class="block-desc">Bus depuis terminal Giwangan (~5–6h, ~100k IDR, compagnie Rosalia Indah). Ou train depuis Gare Tugu (~4h, plus confortable, ~80–150k IDR) — réserve sur KAI Access.</div>
+              <div class="tags">
+                <span class="tag tag-tip">Train recommandé si dispo — plus stable et plus confortable pour cette longue route</span>
+                <span class="tag tag-price">Bus ~4 CHF · Train ~5–8 CHF</span>
+                <span class="tag tag-time">5–6h de trajet</span>
+              </div>
+            </div>
+          </div>
+          <div class="block section-head"><span class="section-head-label">Milieu de journée</span></div>
+          <div class="block">
+            <div class="block-icon">🍜</div>
+            <div class="block-body">
+              <div class="block-time">~13h00 — 30–45 min</div>
+              <div class="block-name">Arrivée Probolinggo — Repas rapide</div>
+              <div class="block-desc">Warung en face de la gare. Mange léger — la route vers Cemoro Lawang est sinueuse et peut être inconfortable l'estomac trop plein. Des conducteurs de minibus t'attendent à la sortie.</div>
+            </div>
+          </div>
+          <div class="block">
+            <div class="block-icon">🚐</div>
+            <div class="block-body">
+              <div class="block-time">~13h30 — 1h30 de route</div>
+              <div class="block-name">Minibus Probolinggo → Cemoro Lawang</div>
+              <div class="block-desc">Village de base du Bromo. Route qui monte fort, virages serrés, vue de plus en plus dégagée sur les volcans. Minibus collectif (~35k IDR) ou jeep privée (~200k).</div>
+              <div class="tags">
+                <span class="tag tag-price">Minibus ~2 CHF · Jeep privée ~12 CHF</span>
+                <span class="tag tag-warn">Il fait 10–15°C la nuit à 2329m — sors une veste de ton sac dès maintenant</span>
+              </div>
+            </div>
+          </div>
+          <div class="block section-head"><span class="section-head-label">Après-midi & soir</span></div>
+          <div class="block">
+            <div class="block-icon">🏨</div>
+            <div class="block-body">
+              <div class="block-time">~15h00</div>
+              <div class="block-name">Check-in à Cemoro Lawang</div>
+              <div class="block-desc">Café Lava Hostel (légendaire, vue sur la caldeira) ou Bromo Permai. Hébergement rustique mais l'essentiel est là. Réserve absolument à l'avance.</div>
+              <div class="tags">
+                <span class="tag tag-price">~10–20 CHF/nuit</span>
+                <span class="tag tag-warn">Peu de lits dans le village — réserve depuis la Suisse</span>
+              </div>
+            </div>
+          </div>
+          <div class="block">
+            <div class="block-icon">🚙</div>
+            <div class="block-body">
+              <div class="block-time">15h30 — 20 min</div>
+              <div class="block-name">Réserve ta Jeep pour demain matin</div>
+              <div class="block-desc">~450–600k IDR par jeep (4–5 personnes). Essaie de te regrouper avec d'autres voyageurs pour partager. Le Café Lava aide souvent à trouver des compagnons.</div>
+              <div class="tags">
+                <span class="tag tag-price">Partagée à 4-5 : ~1.50 CHF/pers</span>
+                <span class="tag tag-tip">Demande le chauffeur de jeep de te récupérer à 03h15 devant l'hôtel</span>
+              </div>
+            </div>
+          </div>
+          <div class="block">
+            <div class="block-icon">🌄</div>
+            <div class="block-body">
+              <div class="block-time">16h00 — 45 min</div>
+              <div class="block-name">Promenade au bord de la caldeira</div>
+              <div class="block-desc">10 min à pied depuis le village jusqu'au bord. Vue sur la "mer de sable" et le Bromo en contrebas. Coucher de soleil si le timing est bon. Permet de comprendre la géographie avant demain.</div>
+              <div class="tags">
+                <span class="tag tag-tip">Pas besoin de payer l'entrée du parc pour ce point de vue depuis le village</span>
+              </div>
+            </div>
+          </div>
+          <div class="block">
+            <div class="block-icon">🍲</div>
+            <div class="block-body">
+              <div class="block-time">18h30 — Coucher 20h</div>
+              <div class="block-name">Dîner chaud & coucher ultra-tôt</div>
+              <div class="block-desc">Soupe chaude ou Mie Goreng au Café Lava. Il fait froid — mange chaud. Règle l'alarme à 03h00. Demain est la journée la plus intense du voyage.</div>
+              <div class="tags">
+                <span class="tag tag-warn">Réveil 03h00 demain — couche à 20h maximum, c'est sérieux</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- J5 -->
+    <div class="day-entry d5">
+      <div class="day-spine">
+        <div class="day-circle">J5</div>
+        <div class="day-line"></div>
+      </div>
+      <div class="day-content">
+        <div class="day-header">
+          <div class="day-date">Samedi 12 septembre 2026</div>
+          <div class="day-title">Lever de soleil sur le <em>Bromo</em></div>
+          <div class="day-subtitle">Caldeira · Mer de sable · Cratère actif · Route 5h vers Banyuwangi</div>
+        </div>
+        <div class="blocks">
+          <div class="block section-head"><span class="section-head-label">Nuit / Petit matin</span></div>
+          <div class="block">
+            <div class="block-icon">🌑</div>
+            <div class="block-body">
+              <div class="block-time">03h00 — Réveil</div>
+              <div class="block-name">Réveil & habille-toi chaud</div>
+              <div class="block-desc">Mets tout ce que tu as de chaud — veste, bonnet si possible. ~8–12°C dans la jeep. Des loueurs de plaids et vestes sont sur place pour ~15k IDR si besoin.</div>
+            </div>
+          </div>
+          <div class="block">
+            <div class="block-icon">🚙</div>
+            <div class="block-body">
+              <div class="block-time">03h15 — 30 min en jeep</div>
+              <div class="block-name">Montée en Jeep 4x4 vers Seruni Point</div>
+              <div class="block-desc">Piste dans le noir absolu. Des dizaines de jeeps convergent vers le même point — ambiance unique. Seruni Point : légèrement moins bondé que Penanjakan, tout aussi spectaculaire.</div>
+              <div class="tags">
+                <span class="tag tag-tip">Descends vite de la jeep et monte les escaliers pour trouver un bon spot devant</span>
+              </div>
+            </div>
+          </div>
+          <div class="block">
+            <div class="block-icon">🌅</div>
+            <div class="block-body">
+              <div class="block-time">05h20 — 1h de contemplation</div>
+              <div class="block-name">Lever de soleil sur le Bromo</div>
+              <div class="block-desc">Le soleil se lève derrière le Semeru (3676m). La caldeira se remplit de lumière dorée. Le Bromo fume doucement. Batok et Argopuro en arrière-plan. Probablement le lever de soleil le plus spectaculaire de ta vie.</div>
+              <div class="tags">
+                <span class="tag tag-warn">Septembre = saison sèche, ciel clair quasi-garanti — tu as choisi la bonne période</span>
+                <span class="tag tag-tip">Ne range pas l'appareil trop tôt — les 20 min après le lever (lumière rasante) sont souvent les plus belles</span>
+              </div>
+            </div>
+          </div>
+          <div class="block section-head"><span class="section-head-label">Matin</span></div>
+          <div class="block">
+            <div class="block-icon">🏜️</div>
+            <div class="block-body">
+              <div class="block-time">06h30 — 30 min</div>
+              <div class="block-name">Descente dans la mer de sable</div>
+              <div class="block-desc">La jeep descend dans la caldeira et traverse la plaine de cendres volcaniques. Paysage lunaire absolument irréel. Le Bromo se dresse devant vous, fumant.</div>
+            </div>
+          </div>
+          <div class="block">
+            <div class="block-icon">🌋</div>
+            <div class="block-body">
+              <div class="block-time">07h15 — 1h30</div>
+              <div class="block-name">Montée au cratère du Bromo</div>
+              <div class="block-desc">~1 km à pied dans la cendre depuis le parking, puis 250 marches. Vue plongeante sur le cratère actif. Cheval disponible au pied (~50k IDR) si tu es fatigué.</div>
+              <div class="tags">
+                <span class="tag tag-time">1h30 aller-retour</span>
+                <span class="tag tag-warn">Pas de rambarde au bord — vent fort, sol meuble, ne t'approche pas trop</span>
+              </div>
+            </div>
+          </div>
+          <div class="block">
+            <div class="block-icon">🍳</div>
+            <div class="block-body">
+              <div class="block-time">09h00 — 45 min</div>
+              <div class="block-name">Retour Cemoro Lawang — Petit-déjeuner mérité</div>
+              <div class="block-desc">Retour en jeep. Omelette, toast, café javanais chaud au café de l'hôtel. Récupère tes bagages. Douche si possible (~20k IDR).</div>
+            </div>
+          </div>
+          <div class="block section-head"><span class="section-head-label">Journée — Longue route</span></div>
+          <div class="block">
+            <div class="block-icon">🚐</div>
+            <div class="block-body">
+              <div class="block-time">10h00 — ~5h de route</div>
+              <div class="block-name">Route Cemoro Lawang → Banyuwangi</div>
+              <div class="block-desc">Option 1 : Shuttle depuis Café Lava direct (~200k IDR/pers, le plus simple). Option 2 : Bus via Probolinggo (~120k IDR, 5h). Option 3 : Voiture privée (~350–450k, 4–5h).</div>
+              <div class="tags">
+                <span class="tag tag-tip">Shuttle Café Lava recommandé — direct et tu rencontres d'autres voyageurs. Demande la veille.</span>
+                <span class="tag tag-price">Shuttle ~12 CHF · Bus ~7 CHF</span>
+                <span class="tag tag-time">4–5h de trajet</span>
+                <span class="tag tag-tip">Dors dans le bus — tu t'es levé à 03h et demain à 00h30</span>
+              </div>
+            </div>
+          </div>
+          <div class="block">
+            <div class="block-icon">🏨</div>
+            <div class="block-body">
+              <div class="block-time">~15h30 — Coucher 20h</div>
+              <div class="block-name">Arrivée & check-in Banyuwangi</div>
+              <div class="block-desc">Hôtel proche du départ Ijen (quartier Licin ou centre). Mange tôt, prépare ton sac, couche à 20h — réveil à 00h30 cette nuit.</div>
+              <div class="tags">
+                <span class="tag tag-price">~15–30 CHF/nuit</span>
+                <span class="tag tag-warn">Réserve transport + guide Ijen depuis l'hôtel dès l'arrivée si pas fait</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- J6 -->
+    <div class="day-entry d6">
+      <div class="day-spine">
+        <div class="day-circle">J6</div>
+        <div class="day-line" style="background: linear-gradient(to bottom, rgba(42,107,94,0.3), transparent);"></div>
+      </div>
+      <div class="day-content">
+        <div class="day-header">
+          <div class="day-date">Dimanche 13 septembre 2026</div>
+          <div class="day-title"><em>Kawah Ijen</em> & Ferry vers Bali</div>
+          <div class="day-subtitle">Feu bleu · Lac acide turquoise · Passage vers Bali · Arrivée chez les amis</div>
+        </div>
+        <div class="blocks">
+          <div class="block section-head"><span class="section-head-label">Nuit</span></div>
+          <div class="block">
+            <div class="block-icon">🌑</div>
+            <div class="block-body">
+              <div class="block-time">00h30 — Réveil</div>
+              <div class="block-name">Réveil & départ pour le Kawah Ijen</div>
+              <div class="block-desc">Minibus de l'hôtel vers le poste de départ Paltuding (~1h). Habille-toi chaud. Lampe frontale indispensable — prévois-en une depuis la Suisse.</div>
+              <div class="tags">
+                <span class="tag tag-warn">Lampe frontale absolument obligatoire — le trek se fait dans le noir complet</span>
+                <span class="tag tag-tip">Mange un peu et bois un café avant — le trek est physique à cette heure</span>
+              </div>
+            </div>
+          </div>
+          <div class="block">
+            <div class="block-icon">🥾</div>
+            <div class="block-body">
+              <div class="block-time">02h00 — 1h30–2h</div>
+              <div class="block-name">Trek nocturne vers le cratère</div>
+              <div class="block-desc">3,5 km, dénivelé +700m. Sentier raide mais bien tracé. Les porteurs de soufre croisés dans le noir avec des charges de 70–90 kg — spectacle de courage saisissant.</div>
+              <div class="tags">
+                <span class="tag tag-time">1h30–2h de montée</span>
+                <span class="tag tag-price">Entrée ~100–150k IDR · Guide ~150k IDR</span>
+                <span class="tag tag-tip">Prends ton temps — le feu bleu dure jusqu'à l'aube, inutile de courir et d'arriver épuisé</span>
+              </div>
+            </div>
+          </div>
+          <div class="block">
+            <div class="block-icon">💙</div>
+            <div class="block-body">
+              <div class="block-time">03h30 — 1h–1h30</div>
+              <div class="block-name">Feu bleu au fond du cratère</div>
+              <div class="block-desc">Descente dans le cratère (20 min supplémentaires, très raide). Le feu bleu = combustion du soufre gazeux à haute température. Flammes bleutées jusqu'à 5m de hauteur. Phénomène rarissime au monde, visible uniquement dans l'obscurité.</div>
+              <div class="tags">
+                <span class="tag tag-warn">Masque à gaz obligatoire pour descendre — émanations de SO₂ toxiques. Loué sur place ~30k IDR</span>
+                <span class="tag tag-tip">Longue exposition si tu as un appareil photo — résultat spectaculaire</span>
+              </div>
+            </div>
+          </div>
+          <div class="block">
+            <div class="block-icon">🌅</div>
+            <div class="block-body">
+              <div class="block-time">05h30 — 30 min</div>
+              <div class="block-name">Lever de soleil sur le lac acide turquoise</div>
+              <div class="block-desc">Le lac Ijen = plus grand lac acide du monde (pH ≈ 0.5, dissout du métal). À l'aube la couleur turquoise-émeraude se dévoile dans la brume de soufre. Irréel et sublime.</div>
+              <div class="tags">
+                <span class="tag tag-warn">Ne touche pas l'eau — extrêmement corrosive</span>
+              </div>
+            </div>
+          </div>
+          <div class="block section-head"><span class="section-head-label">Matin</span></div>
+          <div class="block">
+            <div class="block-icon">🥾</div>
+            <div class="block-body">
+              <div class="block-time">06h00 — 1h15</div>
+              <div class="block-name">Descente vers Paltuding</div>
+              <div class="block-desc">Descente tranquille avec la lumière du matin. Vue sur les volcans et la campagne de Java-Est. Observe les porteurs de soufre — certains acceptent qu'on soulève leur charge.</div>
+              <div class="tags">
+                <span class="tag tag-tip">Achète un souvenir en soufre sculpté directement aux porteurs — ça les aide vraiment</span>
+              </div>
+            </div>
+          </div>
+          <div class="block">
+            <div class="block-icon">🍳</div>
+            <div class="block-body">
+              <div class="block-time">07h30 — 45 min</div>
+              <div class="block-name">Petit-déjeuner à Paltuding + route retour</div>
+              <div class="block-desc">Warung ouverts très tôt pour les randonneurs. Mange bien — longue journée de transport. Route retour ~1h vers Banyuwangi. Douche et bagages à l'hôtel.</div>
+              <div class="tags">
+                <span class="tag tag-tip">Tes vêtements sentiront le soufre longtemps — mets-les dans un sac plastique séparé</span>
+              </div>
+            </div>
+          </div>
+          <div class="block section-head"><span class="section-head-label">Après-midi — Passage vers Bali</span></div>
+          <div class="block">
+            <div class="block-icon">🚐</div>
+            <div class="block-body">
+              <div class="block-time">11h00 — 30 min</div>
+              <div class="block-name">Route → Port de Ketapang</div>
+              <div class="block-desc">~20 min en Grab depuis Banyuwangi (~30k IDR). Ferries toutes les 30–60 min, 24h/24. Pas de réservation nécessaire.</div>
+            </div>
+          </div>
+          <div class="block">
+            <div class="block-icon">⛴️</div>
+            <div class="block-body">
+              <div class="block-time">11h30 — 45 min de traversée</div>
+              <div class="block-name">Ferry Ketapang (Java) → Gilimanuk (Bali)</div>
+              <div class="block-desc">Traversée du Détroit de Bali — 3,5 km. Vue sur les deux îles. Monte sur le pont supérieur pour voir Java derrière et Bali devant.</div>
+              <div class="tags">
+                <span class="tag tag-price">Ferry ~1 CHF — le moins cher du voyage</span>
+              </div>
+            </div>
+          </div>
+          <div class="block" style="background: linear-gradient(135deg, rgba(42,107,94,0.06), rgba(42,107,94,0.02));">
+            <div class="block-icon">🏝️</div>
+            <div class="block-body">
+              <div class="block-time">12h30 — Tu es à Bali !</div>
+              <div class="block-name">Gilimanuk → Retrouver les amis</div>
+              <div class="block-desc">Grab ou bus vers Seminyak/Kuta/Ubud/Canggu selon où sont tes amis (~2h30–3h30). Ou loue une moto au port (~80k IDR/j). Java est derrière toi.</div>
+              <div class="tags">
+                <span class="tag tag-price">Bus Gilimanuk → Sud Bali ~4 CHF · Grab ~12 CHF</span>
+                <span class="tag tag-time">2h30–3h30 selon destination</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- BUDGET -->
+<section class="budget-section">
+  <div class="container">
+    <div class="section-tag" style="color: rgba(245,240,232,0.4);">
+      <span style="background:rgba(245,240,232,0.2); width:24px; height:0.5px; display:inline-block;"></span>
+      Estimation financière
+    </div>
+    <h2 style="font-family:'Playfair Display',serif; font-size:2rem; font-weight:700; color:var(--cream); margin-top:0.5rem;">Budget <em style="color:var(--orange); font-style:italic;">par personne</em></h2>
+    <p style="color:rgba(245,240,232,0.4); font-size:0.85rem; margin-top:0.5rem;">Hors vols internationaux. Budget confortable, pas luxueux.</p>
+    <div class="budget-grid">
+      <div class="budget-cell">
+        <div class="budget-label">Transports Java</div>
+        <div class="budget-num">~55 CHF</div>
+      </div>
+      <div class="budget-cell">
+        <div class="budget-label">Hébergements (5 nuits)</div>
+        <div class="budget-num">~90 CHF</div>
+      </div>
+      <div class="budget-cell">
+        <div class="budget-label">Entrées sites</div>
+        <div class="budget-num">~45 CHF</div>
+      </div>
+      <div class="budget-cell">
+        <div class="budget-label">Nourriture (6 jours)</div>
+        <div class="budget-num">~35 CHF</div>
+      </div>
+      <div class="budget-cell">
+        <div class="budget-label">Divers & imprévus</div>
+        <div class="budget-num">~25 CHF</div>
+      </div>
+      <div class="budget-cell total">
+        <div class="budget-label">Total estimé</div>
+        <div class="budget-num">~250 CHF</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TIPS ESSENTIELS -->
+<section class="tips-section">
+  <div class="container">
+    <div class="section-tag">Avant de partir</div>
+    <h2 style="font-family:'Playfair Display',serif; font-size:2rem; font-weight:700; margin-top:0.5rem;">Tips <em style="color:var(--orange); font-style:italic;">essentiels</em></h2>
+    <div class="tips-grid">
+      <div class="tip-card">
+        <div class="tip-icon">📱</div>
+        <div class="tip-title">Applis indispensables</div>
+        <div class="tip-text">Installe Grab (taxi), KAI Access (trains), Google Translate avec pack hors-ligne indonésien téléchargé. Achète une SIM locale à l'aéroport (~10 CHF pour 30 jours de data).</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-icon">🏥</div>
+        <div class="tip-title">Santé</div>
+        <div class="tip-text">Consulte ton médecin pour hépatite A, typhoïde. Emporte Imodium, Smecta, crème solaire 50+, répulsif anti-moustiques DEET fort. Eau en bouteille toujours.</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-icon">🎒</div>
+        <div class="tip-title">Équipement clé</div>
+        <div class="tip-text">Lampe frontale (Ijen = obligatoire), veste légère (Bromo/Ijen = froid la nuit), sandales solides, crème solaire, cadenas pour le sac. Voyage léger — tu vas te déplacer beaucoup.</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-icon">💵</div>
+        <div class="tip-title">Argent</div>
+        <div class="tip-text">Change des roupies à l'aéroport de Jakarta. Gardes toujours du cash — les petits warungs n'acceptent pas la carte. 1 CHF ≈ 17 000 IDR. Withdrawals ATM possibles dans les grandes villes.</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-icon">📅</div>
+        <div class="tip-title">À réserver en avance</div>
+        <div class="tip-text">Hébergement à Cemoro Lawang (peu de lits), billets Borobudur en ligne (file prioritaire), train Yogya → Probolinggo sur KAI Access. Le reste peut se faire sur place.</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-icon">🌤️</div>
+        <div class="tip-title">Météo favorable</div>
+        <div class="tip-text">Septembre = saison sèche sur Java et Bali. Ciel clair quasi-garanti pour le Bromo et l'Ijen. Chaleur ~30°C en journée, frais la nuit en altitude. Parfait timing.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>Java → Bali · Septembre 2026 · <strong>Bon voyage !</strong></p>
+  <p style="margin-top: 0.6rem; font-size: 0.7rem; color: rgba(245,240,232,0.18); letter-spacing: 0.12em;">Made with ❤️ by <strong style="color: rgba(245,240,232,0.35); font-weight: 400;">Max & Maël</strong></p>
+</footer>
+
+<script>
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), 80);
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.08 });
+
+  document.querySelectorAll('.day-entry').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
